@@ -24,11 +24,11 @@ from .types import (
 
 
 def nsdate_to_datetime(nsdate: Any) -> datetime | None:
-    """Convert an NSDate to a Python datetime (UTC)."""
+    """Convert an NSDate to a timezone-aware Python datetime in the system local timezone."""
     if nsdate is None:
         return None
     timestamp = nsdate.timeIntervalSince1970()
-    return datetime.fromtimestamp(timestamp, tz=UTC)
+    return datetime.fromtimestamp(timestamp).astimezone()
 
 
 def datetime_to_nsdate(dt: datetime) -> Any:

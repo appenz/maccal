@@ -1,22 +1,25 @@
-# maccal
+# macCal
 
-A Python library to access macOS calendars via EventKit and PyObjC.
+A Python library to access local macOS calendars via EventKit and PyObjC. Works with macOS 26 Tahoe.
 
-## Features
+## Overview
 
-- List available calendars
-- Query events by date range
-- Search events by keyword across all fields or specific fields
-- Create, update, and delete events (with recurring event support)
-- Find free time slots
+- Written in 100% python, easy to audit and extend
+- Can search events, find free time, add/edit/delete events
+- Fully typed
+- Apache 2.0
+
+Written by Guido Appenzeller, guido@appenzeller.net. Feedback and PR's welcome.
 
 ## Requirements
 
 - macOS 14+ (Sonoma or later)
-- Python 3.13+
+- Python 13, but probably works with earlier versions
 - Calendar access permission
 
 ## Installation
+
+With uv
 
 ```bash
 pip install maccal
