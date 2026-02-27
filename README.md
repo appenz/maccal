@@ -14,7 +14,7 @@ Written by Guido Appenzeller, guido@appenzeller.net. Feedback and PR's welcome.
 ## Requirements
 
 - macOS 14+ (Sonoma or later)
-- Python 13, but probably works with earlier versions
+- Python 3.13, but probably works with earlier versions
 - Calendar access permission
 
 ## Installation
@@ -28,7 +28,7 @@ pip install maccal
 For development:
 
 ```bash
-git clone https://github.com/your-org/maccal.git
+git clone https://github.com/appenz/maccal
 cd maccal
 make install
 ```

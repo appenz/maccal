@@ -1,6 +1,6 @@
 [project]
 name = "maccal"
-version = "0.1.0"
+version = "1.0.0"
 description = "Python library to access macOS calendars via EventKit"
 readme = "README.md"
 license = "Apache-2.0"
@@ -19,6 +19,11 @@ classifiers = [
 dependencies = [
     "pyobjc-framework-EventKit>=11.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/appenz/maccal"
+Repository = "https://github.com/appenz/maccal"
+Issues = "https://github.com/appenz/maccal/issues"
 
 [dependency-groups]
 dev = [
