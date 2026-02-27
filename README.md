@@ -19,7 +19,7 @@ Written by Guido Appenzeller, guido@appenzeller.net. Feedback and PR's welcome.
 
 ## Installation
 
-With uv
+With pip:
 
 ```bash
 pip install maccal
