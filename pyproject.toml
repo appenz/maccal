@@ -10,7 +10,7 @@ authors = [
 requires-python = ">=3.13"
 keywords = ["macos", "calendar", "eventkit", "pyobjc"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Operating System :: MacOS",
     "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: Apache Software License",
