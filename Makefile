@@ -1,4 +1,4 @@
-.PHONY: install test lint format build clean benchmark
+.PHONY: install test lint format build clean benchmark publish
 
 install:
 	uv sync --dev
@@ -21,3 +21,6 @@ clean:
 
 benchmark:
 	uv run python -m benchmarks.bench_query
+
+publish: clean build
+	set -a && . ./.env && set +a && uv publish
