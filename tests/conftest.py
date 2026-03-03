@@ -90,3 +90,35 @@ def sample_event(ek_store, test_calendar):
         ek_store.removeEvent_span_error_(event, EventKit.EKSpanThisEvent, None)
     except Exception:
         pass
+
+
+@pytest.fixture()
+def sample_event_with_geo(ek_store, test_calendar):
+    """Create a test event with a structured location including geo coordinates."""
+    import EventKit
+    import objc
+
+    from maccal._convert import datetime_to_nsdate
+
+    CLLocation = objc.lookUpClass("CLLocation")
+
+    now = datetime.now(tz=UTC)
+    event = EventKit.EKEvent.eventWithEventStore_(ek_store)
+    event.setTitle_("maccal geo test event")
+    event.setStartDate_(datetime_to_nsdate(now + timedelta(hours=1)))
+    event.setEndDate_(datetime_to_nsdate(now + timedelta(hours=2)))
+    event.setCalendar_(test_calendar)
+
+    sloc = EventKit.EKStructuredLocation.locationWithTitle_("Apple Park")
+    geo = CLLocation.alloc().initWithLatitude_longitude_(37.3349, -122.0090)
+    sloc.setGeoLocation_(geo)
+    event.setStructuredLocation_(sloc)
+
+    ek_store.saveEvent_span_error_(event, EventKit.EKSpanThisEvent, None)
+
+    yield event
+
+    try:
+        ek_store.removeEvent_span_error_(event, EventKit.EKSpanThisEvent, None)
+    except Exception:
+        pass

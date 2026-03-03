@@ -204,10 +204,11 @@ def ek_event_to_event(ek_event: Any) -> Event:
     ek_sloc = ek_event.structuredLocation()
     if ek_sloc is not None:
         geo = ek_sloc.geoLocation()
+        coord = geo.coordinate() if geo else None
         structured_loc = Location(
             title=str(ek_sloc.title()) if ek_sloc.title() else None,
-            latitude=geo.coordinate().latitude if geo else None,
-            longitude=geo.coordinate().longitude if geo else None,
+            latitude=coord[0] if coord else None,
+            longitude=coord[1] if coord else None,
             radius=float(ek_sloc.radius()) if ek_sloc.radius() else None,
         )
 

@@ -115,6 +115,24 @@ class TestFindEvents:
             )
 
 
+class TestStructuredLocation:
+    def test_event_with_geo_coordinates(self, store, sample_event_with_geo, test_calendar):
+        """Converting an event with geo coordinates must not raise AttributeError."""
+        cal_name = str(test_calendar.title())
+        now = datetime.now(tz=UTC)
+        events = store.get_events(
+            now - timedelta(hours=1),
+            now + timedelta(hours=24),
+            calendars=[cal_name],
+        )
+        geo_events = [e for e in events if e.title == "maccal geo test event"]
+        assert len(geo_events) >= 1
+        loc = geo_events[0].structured_location
+        assert loc is not None
+        assert loc.latitude == pytest.approx(37.3349, abs=0.01)
+        assert loc.longitude == pytest.approx(-122.0090, abs=0.01)
+
+
 class TestAddAndDeleteEvent:
     def test_add_minimal_event(self, store, test_calendar):
         cal_name = str(test_calendar.title())
