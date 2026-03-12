@@ -40,22 +40,59 @@ def datetime_to_nsdate(dt: datetime) -> Any:
     return NSDate.dateWithTimeIntervalSince1970_(dt.timestamp())
 
 
+def _color_to_hex(color: Any) -> str | None:
+    """Extract a hex color string from an EKCalendar color object.
+
+    The object may be an NSColor (NSColorSpaceColor) when AppKit is loaded,
+    or a raw CGColorRef in headless / no-AppKit environments.  We try the
+    NSColor component accessors first, then fall back to the CoreGraphics
+    C API via ctypes — avoiding NSColor.colorWithCGColor_ entirely so we
+    never trigger a SIGBUS in processes without a running NSApplication.
+    """
+    try:
+        r = int(color.redComponent() * 255)
+        g = int(color.greenComponent() * 255)
+        b = int(color.blueComponent() * 255)
+        return f"#{r:02x}{g:02x}{b:02x}"
+    except Exception:
+        pass
+
+    try:
+        import ctypes
+        import ctypes.util
+
+        import objc
+
+        _cg = ctypes.cdll.LoadLibrary(ctypes.util.find_library("CoreGraphics"))
+        _cg.CGColorGetNumberOfComponents.restype = ctypes.c_size_t
+        _cg.CGColorGetNumberOfComponents.argtypes = [ctypes.c_void_p]
+        _cg.CGColorGetComponents.restype = ctypes.POINTER(ctypes.c_double)
+        _cg.CGColorGetComponents.argtypes = [ctypes.c_void_p]
+
+        ptr = objc.pyobjc_id(color)
+        n = _cg.CGColorGetNumberOfComponents(ptr)
+        comp = _cg.CGColorGetComponents(ptr)
+
+        if n >= 3:
+            r = int(min(max(comp[0], 0.0), 1.0) * 255)
+            g = int(min(max(comp[1], 0.0), 1.0) * 255)
+            b = int(min(max(comp[2], 0.0), 1.0) * 255)
+            return f"#{r:02x}{g:02x}{b:02x}"
+        if n == 2:
+            gray = int(min(max(comp[0], 0.0), 1.0) * 255)
+            return f"#{gray:02x}{gray:02x}{gray:02x}"
+    except Exception:
+        pass
+
+    return None
+
+
 def ek_calendar_to_calendar(ek_cal: Any) -> Calendar:
     """Convert an EKCalendar to a maccal Calendar."""
     color_hex = None
     cg_color = ek_cal.color()
     if cg_color is not None:
-        try:
-            from AppKit import NSColor
-
-            ns_color = NSColor.colorWithCGColor_(cg_color)
-            if ns_color is not None:
-                r = int(ns_color.redComponent() * 255)
-                g = int(ns_color.greenComponent() * 255)
-                b = int(ns_color.blueComponent() * 255)
-                color_hex = f"#{r:02x}{g:02x}{b:02x}"
-        except Exception:
-            pass
+        color_hex = _color_to_hex(cg_color)
 
     source_title = None
     source = ek_cal.source()

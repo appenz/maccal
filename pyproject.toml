@@ -1,6 +1,6 @@
 [project]
 name = "maccal"
-version = "1.0.1"
+version = "1.0.2"
 description = "Python library to access macOS calendars via EventKit"
 readme = "README.md"
 license = "Apache-2.0"

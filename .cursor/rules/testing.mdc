@@ -1,0 +1,11 @@
+---
+description: How to run tests and debug in this project
+alwaysApply: true
+---
+
+# Testing
+
+- Always run tests yourself rather than asking the user to run them.
+- Use `make test` to run the full test suite (it runs `uv run pytest -v`).
+- To run a single test: `uv run pytest tests/<file>::<class>::<test> -x -v`
+- Tests require macOS with calendar access granted. `make test` has the necessary permissions.
